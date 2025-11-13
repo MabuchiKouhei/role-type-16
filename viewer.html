@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Role Type Viewer - 16 Roles</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .stats {
+            background: rgba(255,255,255,0.95);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-number {
+            color: #667eea;
+            font-size: 1.5em;
+        }
+
+        .role-section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .role-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .role-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .role-title {
+            flex: 1;
+        }
+
+        .role-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .role-code {
+            color: #666;
+            font-size: 0.9em;
+            font-family: 'Courier New', monospace;
+            background: #f5f5f5;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .character-card {
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .character-card img {
+            width: 100%;
+            height: auto;
+            max-height: 350px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: white;
+            padding: 10px;
+        }
+
+        .character-label {
+            margin-top: 12px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+            text-decoration: none;
+            font-size: 1.5em;
+        }
+
+        .back-to-top:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .role-name {
+                font-size: 1.4em;
+            }
+
+            .character-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header" id="top">
+            <h1>🎮 Character Role Type Viewer</h1>
+            <p>16種類のロールタイプ別キャラクター一覧</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">16</span>
+                    <span>ロールタイプ</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">48</span>
+                    <span>キャラクター</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span>各ロールあたり</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 剣聖 (OMPB) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">1</div>
+                <div class="role-title">
+                    <span class="role-name">剣聖</span>
+                    <span class="role-code">OMPB</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="剣聖_OMPB/剣聖_1.svg" alt="剣聖 1">
+                    <div class="character-label">剣聖 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="剣聖_OMPB/剣聖_2.svg" alt="剣聖 2">
+                    <div class="character-label">剣聖 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="剣聖_OMPB/剣聖_3.svg" alt="剣聖 3">
+                    <div class="character-label">剣聖 #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 盾騎士 (DMPS) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">2</div>
+                <div class="role-title">
+                    <span class="role-name">盾騎士</span>
+                    <span class="role-code">DMPS</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="盾騎士_DMPS/盾騎士_1.svg" alt="盾騎士 1">
+                    <div class="character-label">盾騎士 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="盾騎士_DMPS/盾騎士_2.svg" alt="盾騎士 2">
+                    <div class="character-label">盾騎士 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="盾騎士_DMPS/盾騎士_3.svg" alt="盾騎士 3">
+                    <div class="character-label">盾騎士 #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 魔導砲手 (ORAB) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">3</div>
+                <div class="role-title">
+                    <span class="role-name">魔導砲手</span>
+                    <span class="role-code">ORAB</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="魔導砲手_ORAB/魔導砲手_1.svg" alt="魔導砲手 1">
+                    <div class="character-label">魔導砲手 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="魔導砲手_ORAB/魔導砲手_2.svg" alt="魔導砲手 2">
+                    <div class="character-label">魔導砲手 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="魔導砲手_ORAB/魔導砲手_3.svg" alt="魔導砲手 3">
+                    <div class="character-label">魔導砲手 #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 霊術司祭 (SRFS) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">4</div>
+                <div class="role-title">
+                    <span class="role-name">霊術司祭</span>
+                    <span class="role-code">SRFS</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="霊術司祭_SRFS/霊術司祭_1.svg" alt="霊術司祭 1">
+                    <div class="character-label">霊術司祭 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="霊術司祭_SRFS/霊術司祭_2.svg" alt="霊術司祭 2">
+                    <div class="character-label">霊術司祭 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="霊術司祭_SRFS/霊術司祭_3.svg" alt="霊術司祭 3">
+                    <div class="character-label">霊術司祭 #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 影の斥候 (ORPB) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">5</div>
+                <div class="role-title">
+                    <span class="role-name">影の斥候</span>
+                    <span class="role-code">ORPB</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="影の斥候_ORPB/影の斥候_1.svg" alt="影の斥候 1">
+                    <div class="character-label">影の斥候 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="影の斥候_ORPB/影の斥候_2.svg" alt="影の斥候 2">
+                    <div class="character-label">影の斥候 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="影の斥候_ORPB/影の斥候_3.svg" alt="影の斥候 3">
+                    <div class="character-label">影の斥候 #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 時間術師 (CRAA) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">6</div>
+                <div class="role-title">
+                    <span class="role-name">時間術師</span>
+                    <span class="role-code">CRAA</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="時間術師_CRAA/時間術師_1.svg" alt="時間術師 1">
+                    <div class="character-label">時間術師 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="時間術師_CRAA/時間術師_2.svg" alt="時間術師 2">
+                    <div class="character-label">時間術師 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="時間術師_CRAA/時間術師_3.svg" alt="時間術師 3">
+                    <div class="character-label">時間術師 #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 機巧エンジニア (SRTS) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">7</div>
+                <div class="role-title">
+                    <span class="role-name">機巧エンジニア</span>
+                    <span class="role-code">SRTS</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="機巧エンジニア_SRTS/機巧エンジニア_1.svg" alt="機巧エンジニア 1">
+                    <div class="character-label">機巧エンジニア #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="機巧エンジニア_SRTS/機巧エンジニア_2.svg" alt="機巧エンジニア 2">
+                    <div class="character-label">機巧エンジニア #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="機巧エンジニア_SRTS/機巧エンジニア_3.svg" alt="機巧エンジニア 3">
+                    <div class="character-label">機巧エンジニア #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 竜槍兵 (OMPA) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">8</div>
+                <div class="role-title">
+                    <span class="role-name">竜槍兵</span>
+                    <span class="role-code">OMPA</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="竜槍兵_OMPA/竜槍兵_1.svg" alt="竜槍兵 1">
+                    <div class="character-label">竜槍兵 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="竜槍兵_OMPA/竜槍兵_2.svg" alt="竜槍兵 2">
+                    <div class="character-label">竜槍兵 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="竜槍兵_OMPA/竜槍兵_3.svg" alt="竜槍兵 3">
+                    <div class="character-label">竜槍兵 #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 霧の術者 (CRAS) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">9</div>
+                <div class="role-title">
+                    <span class="role-name">霧の術者</span>
+                    <span class="role-code">CRAS</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="霧の術者_CRAS/霧の術者_1.svg" alt="霧の術者 1">
+                    <div class="character-label">霧の術者 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="霧の術者_CRAS/霧の術者_2.svg" alt="霧の術者 2">
+                    <div class="character-label">霧の術者 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="霧の術者_CRAS/霧の術者_3.svg" alt="霧の術者 3">
+                    <div class="character-label">霧の術者 #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 聖盾パラディン (DMFS) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">10</div>
+                <div class="role-title">
+                    <span class="role-name">聖盾パラディン</span>
+                    <span class="role-code">DMFS</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="聖盾パラディン_DMFS/聖盾パラディン_1.svg" alt="聖盾パラディン 1">
+                    <div class="character-label">聖盾パラディン #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="聖盾パラディン_DMFS/聖盾パラディン_2.svg" alt="聖盾パラディン 2">
+                    <div class="character-label">聖盾パラディン #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="聖盾パラディン_DMFS/聖盾パラディン_3.svg" alt="聖盾パラディン 3">
+                    <div class="character-label">聖盾パラディン #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- アルケミスト (SRTA) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">11</div>
+                <div class="role-title">
+                    <span class="role-name">アルケミスト</span>
+                    <span class="role-code">SRTA</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="アルケミスト_SRTA/アルケミスト_1.svg" alt="アルケミスト 1">
+                    <div class="character-label">アルケミスト #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="アルケミスト_SRTA/アルケミスト_2.svg" alt="アルケミスト 2">
+                    <div class="character-label">アルケミスト #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="アルケミスト_SRTA/アルケミスト_3.svg" alt="アルケミスト 3">
+                    <div class="character-label">アルケミスト #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ビーストマスター (CRPS) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">12</div>
+                <div class="role-title">
+                    <span class="role-name">ビーストマスター</span>
+                    <span class="role-code">CRPS</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="ビーストマスター_CRPS/ビーストマスター_1.svg" alt="ビーストマスター 1">
+                    <div class="character-label">ビーストマスター #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="ビーストマスター_CRPS/ビーストマスター_2.svg" alt="ビーストマスター 2">
+                    <div class="character-label">ビーストマスター #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="ビーストマスター_CRPS/ビーストマスター_3.svg" alt="ビーストマスター 3">
+                    <div class="character-label">ビーストマスター #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 炎舞踊家 (OMAB) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">13</div>
+                <div class="role-title">
+                    <span class="role-name">炎舞踊家</span>
+                    <span class="role-code">OMAB</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="炎舞踊家_OMAB/炎舞踊家_1.svg" alt="炎舞踊家 1">
+                    <div class="character-label">炎舞踊家 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="炎舞踊家_OMAB/炎舞踊家_2.svg" alt="炎舞踊家 2">
+                    <div class="character-label">炎舞踊家 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="炎舞踊家_OMAB/炎舞踊家_3.svg" alt="炎舞踊家 3">
+                    <div class="character-label">炎舞踊家 #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 吟遊詩人 (SRFA) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">14</div>
+                <div class="role-title">
+                    <span class="role-name">吟遊詩人</span>
+                    <span class="role-code">SRFA</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="吟遊詩人_SRFA/吟遊詩人_1.svg" alt="吟遊詩人 1">
+                    <div class="character-label">吟遊詩人 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="吟遊詩人_SRFA/吟遊詩人_2.svg" alt="吟遊詩人 2">
+                    <div class="character-label">吟遊詩人 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="吟遊詩人_SRFA/吟遊詩人_3.svg" alt="吟遊詩人 3">
+                    <div class="character-label">吟遊詩人 #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 凍結ハンター (CRAB) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">15</div>
+                <div class="role-title">
+                    <span class="role-name">凍結ハンター</span>
+                    <span class="role-code">CRAB</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="凍結ハンター_CRAB/凍結ハンター_1.svg" alt="凍結ハンター 1">
+                    <div class="character-label">凍結ハンター #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="凍結ハンター_CRAB/凍結ハンター_2.svg" alt="凍結ハンター 2">
+                    <div class="character-label">凍結ハンター #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="凍結ハンター_CRAB/凍結ハンター_3.svg" alt="凍結ハンター 3">
+                    <div class="character-label">凍結ハンター #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 砂漠の守護者 (DMPA) -->
+        <div class="role-section">
+            <div class="role-header">
+                <div class="role-number">16</div>
+                <div class="role-title">
+                    <span class="role-name">砂漠の守護者</span>
+                    <span class="role-code">DMPA</span>
+                </div>
+            </div>
+            <div class="character-grid">
+                <div class="character-card">
+                    <img src="砂漠の守護者_DMPA/砂漠の守護者_1.svg" alt="砂漠の守護者 1">
+                    <div class="character-label">砂漠の守護者 #1</div>
+                </div>
+                <div class="character-card">
+                    <img src="砂漠の守護者_DMPA/砂漠の守護者_2.svg" alt="砂漠の守護者 2">
+                    <div class="character-label">砂漠の守護者 #2</div>
+                </div>
+                <div class="character-card">
+                    <img src="砂漠の守護者_DMPA/砂漠の守護者_3.svg" alt="砂漠の守護者 3">
+                    <div class="character-label">砂漠の守護者 #3</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <a href="#top" class="back-to-top" title="トップに戻る">↑</a>
+
+    <script>
+        // Smooth scroll for back to top button
+        document.querySelector('.back-to-top').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Log loaded characters
+        console.log('Character Role Type Viewer loaded successfully!');
+        console.log('Total roles: 16');
+        console.log('Total characters: 48');
+    </script>
+</body>
+</html>
